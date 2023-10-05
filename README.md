@@ -12,7 +12,7 @@ on selline:
   
   
 NB! Selleks, et giti mitte suurte failidega koormata, helifaile siin repos pole.
-Need tuleks kõigepealt all laadida ja lahti pakkida, selleks, siinsamas kataloogis:
+Need tuleks (kui vaja) alla laadida ja lahti pakkida, selleks, siinsamas kataloogis käivitada:
 
     wget -O - https://cs.taltech.ee/staff/tanel.alumae/data/k6net6lge/k6net6lke-benchmark-audio.tar | tar xv 
     
