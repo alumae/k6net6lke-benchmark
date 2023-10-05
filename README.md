@@ -7,16 +7,22 @@ Kataloogis `data` on testandmed, lähtekeelte kaupa -- näiteks `data/et`
 sisaldab eestikeelse sisendkõnega testandmeid. Failinimede kontseptsioon
 on selline:
 
-  * <failinimi>.<sisendkeel>.OS.flac -- sisendkõne 
-  * <failinimi>.<sihtkeel>.OSt -- transkriptsioon antud keeles (võib olla tõlge)
+  * `<failinimi>.<sisendkeel>.OS.flac` -- sisendkõne 
+  * `<failinimi>.<sihtkeel>.OSt` -- transkriptsioon antud keeles (võib olla tõlge)
   
+  
+NB! Selleks, et giti mitte suurte failidega koormata, helifaile siin repos pole.
+Need tuleks kõigepealt all laadida ja lahti pakkida, selleks, siinsamas kataloogis:
+
+    wget -O - https://cs.taltech.ee/staff/tanel.alumae/data/k6net6lge/k6net6lke-benchmark-audio.tar | tar xv 
     
 Mingi süsteemi rakendamisena saadud tõlgitud andmed on üldjuhul mingis muus kataloogis (vaata näiteks 
-`outputs/et/mt/whisper-large-v2/`. Siin on failinimede kontseptsioon: <failinimi>.<sisendkeel>.<sihtkeel>.mt
+`outputs/et/mt/whisper-large-v2/`. Siin on failinimede kontseptsioon: `<failinimi>.<sisendkeel>.<sihtkeel>.mt`
 
 Selleks, et hinnata tõlkesüsteemi hüpoteeside BLEU skoori, käivita:
 
-    ./run-mt-eval.sh --refdir <dir-with-reference-OSt-files> --source <source_lang> --target <target_lang> <dir-with-output-files from-machine-translation>
+    ./run-mt-eval.sh --refdir <dir-with-reference-OSt-files> `
+      --source <source_lang> --target <target_lang> <dir-with-output-files from-machine-translation>
 
 NB! Enne peab olema installitud `SLTev` pythoni pakett (`pip3 install SLTev`).  
   
@@ -27,7 +33,7 @@ tõlgitud tekst olla ka kõik ühel real. Joondus automaatsete tõlgete ja refer
   
 Näiteks:
 
-   ./run-mt-eval.sh --refdir data/et --source et --target en outputs/et/mt/whisper-large-v2/
+    ./run-mt-eval.sh --refdir data/et --source et --target en outputs/et/mt/whisper-large-v2/
    
 Tulemus:
 
