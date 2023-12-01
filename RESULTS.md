@@ -1,3 +1,7 @@
+# Comparison of speech translation systems
+
+Note that some systems use oracle transcriptions and are only listed for reference.
+
 | Model             | From Estonian              || To Estonian      ||
 |-------------------|:---------------:|:---------:|:-------------:|:---------:|
 |                   | *English*       | *Russian* | *English*     | *Russian* |
@@ -7,3 +11,13 @@
 |Whisper-medium-et-orthographic + GPT3.5 | 32.9 | 26.5 |      |
 |Whisper-medium-et-orthographic + GPT4 | 35.1 |  |      |
 
+# Comparison of ASR systems
+
+## Estonian
+
+| Model | WER |
+|-------|:----------:|
+|Whisper-medium-et-orthographic | 10.5 |
+
+
+All results are calculated on dev data.
