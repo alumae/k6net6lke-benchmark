@@ -9,7 +9,7 @@ Note that some systems use oracle transcriptions and are only listed for referen
 |_Reference transcripts + GPT4_ | 38.3 | 31.3 | |
 |Whisper-large-v2   |       17.6    |         |             |         |
 |Whisper-medium-et-orthographic + GPT3.5 | 32.9 | 26.5 |      |
-|Whisper-medium-et-orthographic + GPT4 | 35.1 |  |      |
+|Whisper-medium-et-orthographic + GPT4 | 35.1   | 29.8 |      |
 
 # Comparison of ASR systems
 
