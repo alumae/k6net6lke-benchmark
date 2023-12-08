@@ -7,13 +7,14 @@ def translate_file(input_file, source_language, target_language, output_file):
 
     # Read the input file
     with open(input_file, 'r', encoding='utf-8') as file:
-        text = file.read()
+        lines = file.readlines()
 
+    text = "<br/>".join(lines)
     # Translate the text
-    translation = translate_client.translate(text, source_language=source_language, target_language=target_language)
+    translation = translate_client.translate(text, format_="text", source_language=source_language, target_language=target_language)
 
     # Decode HTML entities in the translated text
-    decoded_text = html.unescape(translation['translatedText'])
+    decoded_text = html.unescape(translation['translatedText'].replace("<br/>", "\n"))
 
     # Write the translated text to the output file
     with open(output_file, 'w', encoding='utf-8') as file:
