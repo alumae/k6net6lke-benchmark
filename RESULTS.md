@@ -11,7 +11,7 @@ Note that some systems use oracle transcriptions and are only listed for referen
 |_Reference transcripts + NLLB 3.3B*_ | 31.4 | 25.2 | |
 |_Reference transcripts + Neurotõlge_ | 34.8 | 29.3 | |
 |Whisper-large-v2   |       17.6    |         |             |         |
-|SeamlessM4T v2 (large)* |       11.7    |         |             |         |
+|SeamlessM4T v2 (large)* |       11.7    |  16.2        |             |         |
 |Whisper-medium-et-orthographic + GPT3.5 | 32.9 | 26.5 |      |
 |Whisper-medium-et-orthographic + GPT4 | 35.1   | 29.8 |      |
 
