@@ -14,6 +14,7 @@ Note that some systems use oracle transcriptions and are only listed for referen
 |SeamlessM4T v2 (large)* |       13.2    |  16.2        |             |         |
 |Whisper-medium-et-orthographic + GPT3.5 | 32.9 | 26.5 |      |
 |Whisper-medium-et-orthographic + GPT4 | 35.1   | 29.8 |      |
+|Whisper-medium-et-orthographic + Neurotõlge |  31.9  | 26.6 |      |
 
 (*) Those systems usually translate number expressions to digits, while our reference translations use words.
 
