@@ -27,6 +27,7 @@ Note that some systems use oracle transcriptions and are only listed for referen
 | Model | WER |
 |-------|:----------:|
 |Whisper-medium-et-orthographic | 10.5 |
+|Whisper-large-v3-et-orthographic | 9.7 |
 
 
 All results are calculated on dev data.
