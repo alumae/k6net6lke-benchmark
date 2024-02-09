@@ -85,6 +85,7 @@ if __name__ == "__main__":
     parser.add_argument("--max-segment-length", type=float, default=30.0)
     parser.add_argument("--device", type=str, default="cuda")    
     parser.add_argument("--model-type", type=str, default="espnet")
+    parser.add_argument("--load-checkpoint", type=str, default="None")
     
     parser.add_argument("model",  type=str)
     parser.add_argument("audio_file",  type=Path)
@@ -109,7 +110,12 @@ if __name__ == "__main__":
             dtype=dtype,
             apply_mintox=False,
         )
-        #breakpoint()
+        if args.load_checkpoint:
+            try:
+              translator.model.load_state_dict(torch.load(args.load_checkpoint))
+            except:
+              pass
+
         with open(args.output_file, "w", encoding="utf-8") as f:
             
             for index, row in tqdm(diarized_segments.iterrows()):
