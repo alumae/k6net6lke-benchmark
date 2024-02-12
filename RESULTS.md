@@ -18,9 +18,9 @@ Note that some systems use oracle transcriptions and are only listed for referen
 | Whisper-medium-et-orthographic + GPT3.5-turbo-instruct |     31.7      |   25.3    |      |
 | Whisper-medium-et-orthographic + GPT4                  |     35.1      |   29.8    |      |
 | Whisper-medium-et-orthographic + Neurotõlge            |     31.9      |   26.6    |      |
-| Whisper-medium-et-orthographic + Google            |               |           |      |
+| Whisper-medium-et-orthographic + Google Translate API  |     34.7      |   23.4    |      |
 | SeamlessM4T v2 (large), finetuned on synth data (ASR + MT) |     35.4      |   26.8    | |
-| Whisper-large-v3, finetuned on synth data (ASR + MT) | 33.2 | 26.1 | |
+| Whisper-large-v3, finetuned on synth data (ASR + MT)   |      33.2     |   26.1    | |
 
 (*) Those systems usually translate number expressions to digits, while our reference translations use words.
 
