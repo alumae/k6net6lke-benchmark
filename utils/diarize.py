@@ -1,6 +1,8 @@
 import argparse
 from pyannote.audio import Pipeline
 import torch
+import torchaudio
+from pyannote.audio.pipelines.utils.hook import ProgressHook
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Diarize long audio file")
@@ -13,7 +15,9 @@ if __name__ == "__main__":
 
     diarization_model = Pipeline.from_pretrained(args.diarization_model)
     diarization_model = diarization_model.to(torch.device("cuda:0"))
-    diarization_raw = diarization_model(args.audio)
+    waveform, sample_rate = torchaudio.load(args.audio)
+    with ProgressHook() as hook:
+      diarization_raw = diarization_model({"waveform": waveform, "sample_rate": sample_rate}, hook=hook)
 
     # dump the diarization output to disk using RTTM format
     with open(args.output_rttm, "w") as rttm:

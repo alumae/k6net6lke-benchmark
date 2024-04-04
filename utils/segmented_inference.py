@@ -4,9 +4,10 @@ import librosa
 from pathlib import Path
 import torch
 
-from pyannote.audio import Pipeline
+#from pyannote.audio import Pipeline
 import pandas as pd
-from pydub import AudioSegment, silence, utils
+#from pydub import AudioSegment, silence, utils
+import librosa
 import hashlib
 import io
 import logging
@@ -94,8 +95,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
    
     device = torch.device(args.device)
-    audio_segment = AudioSegment.from_file(args.audio_file)
-    assert audio_segment.frame_rate == 16000
+    #audio_segment = AudioSegment.from_file(args.audio_file)
+    
+    audio, rate = librosa.load(args.audio_file, sr=16000) #
+    #assert audio_segment.frame_rate == 16000
     
     diarized_segments = construct_segments(args.rttm_file)
 
@@ -119,15 +122,57 @@ if __name__ == "__main__":
         with open(args.output_file, "w", encoding="utf-8") as f:
             
             for index, row in tqdm(diarized_segments.iterrows()):
-                audio = torch.tensor(audio_segment[row["start"]*1000:row["end"]*1000].get_array_of_samples()).to(device)
-                out_texts, _ = translator.predict(input=audio, task_str="S2TT", src_lang=args.src_lang, tgt_lang=args.tgt_lang)
+                #audio = torch.tensor(audio_segment[row["start"]*16000:row["end"]*16000].get_array_of_samples()).to(device)
+                audio_segment = torch.tensor(audio[int(row["start"]*16000):int(row["end"]*16000)]).to(device)
+                    
+                out_texts, _ = translator.predict(input=audio_segment, task_str="S2TT", src_lang=args.src_lang, tgt_lang=args.tgt_lang)
                 
                 out_text = str(out_texts[0])
                 
-                print(out_text, file=f)
+                print(out_text)
+                print(out_text, file=f, flush=True)
+    elif args.model_type == "espnet":
+        logging.info("Doing S2TT using a Espnet model")
+        
+        from espnet2.bin.s2t_inference import Speech2Text        
+        s2t = Speech2Text.from_pretrained(
+            model_tag=args.model,
+            device=str(device),
+            beam_size=1,
+            ctc_weight=0.0,
+            maxlenratio=0.0,
+            lang_sym=f"<{args.src_lang}>",
+            task_sym=f"<st_{args.tgt_lang}>",
+            predict_time=False,
+            quantize_s2t_model=False
+        )
+        
+        with open(args.output_file, "w", encoding="utf-8") as f:            
+            for index, row in tqdm(diarized_segments.iterrows()):
                 
+                audio_segment = torch.tensor(audio[int(row["start"]*16000):int(row["end"]*16000)]).to(device)
+                #breakpoint()
+                # if audio.dtype == torch.int64:
+                    # audio =  audio / 2**31                    
+                # if audio.dtype == torch.int32:
+                    # audio =  audio / 2**15
 
-
+                #breakpoint()
+                s2t.maxlenratio = -min(300, int((len(audio_segment) / rate) * 10))  # assuming 10 tokens per second
+                utts = s2t.decode_long(
+                                audio_segment,
+                                condition_on_prev_text=False,
+                                init_text="",
+                                end_time_threshold="<29.00>"
+                                )                
+                
+                #print(utts)
+                out_text = " ".join([utt[2] for utt in utts])
+                
+                print(out_text, file=f, flush=True)
+        
+    else:
+        raise Excepton(f"Unknown model type: {args.model_type}")
         
     
     
