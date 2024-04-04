@@ -15,7 +15,7 @@ Note that some systems use oracle transcriptions and are only listed for referen
 | Whisper-large-v2                                       |     17.6      |           |             |         |
 | Whisper-large-v3                                       |     14.9      |           |             |         |
 | SeamlessM4T v2 (large)*                                |     13.2      |   16.2    |             |         |
-| OWSM 3.1 EBF                                           |      0.5      |           |  | |
+| OWSM 3.1 EBF                                           |      0.5      |   0.0         |  | |
 | Whisper-medium-et-orthographic + GPT3.5-turbo          |     32.9      |   26.5    |      |
 | Whisper-medium-et-orthographic + GPT3.5-turbo-instruct |     31.7      |   25.3    |      |
 | Whisper-medium-et-orthographic + GPT4                  |     35.1      |   29.8    |      |
