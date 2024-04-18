@@ -28,6 +28,24 @@ Note that some systems use oracle transcriptions and are only listed for referen
 
 (*) Those systems usually translate number expressions to digits, while our reference translations use words.
 
+## BLEURT scores
+
+| Model                                                  | From Estonian |           | To Estonian      ||
+|--------------------------------------------------------|:-------------:|:---------:|:-------------:|:---------:|
+|                                                        |   *English*   | *Russian* | *English*     | *Russian* |
+| _Reference transcripts + Google Translate API_         |     0.690      |       | |
+| _Reference transcripts + DeepL_                        |     0.678      |       | |
+| Whisper-medium-et-orthographic + Google Translate API  |     0.628      |       |      |
+| SeamlessM4T v2 (large), finetuned on synth data (ASR + MT) |  0.618       |       | |
+| Whisper-large-v3, finetuned on synth data (ASR + MT)   |   0.611        |      | |
+| OWSM 3.1 EBF , finetuned on synth data (ASR + MT)   |     0.541      |       | |
+
+
+
+
+
+
+
 # Comparison of ASR systems
 
 ## Estonian
