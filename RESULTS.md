@@ -24,6 +24,7 @@ Note that some systems use oracle transcriptions and are only listed for referen
 | Whisper-medium-et-orthographic + Neurotõlge            |     31.9      |   26.6    |      |
 | Whisper-medium-et-orthographic + Google Translate API  |     34.7      |   23.4    |      |
 | OWSM 3.0, finetuned on extra web data                  |      8.7      |    5.4    |      |
+| SeamlessM4T v2 (large), finetuned on extra web data    |      19.3     |           |      | 
 | SeamlessM4T v2 (large), finetuned on synth data (ASR + MT) |     35.4      |   26.8    | |
 | Whisper-large-v3, finetuned on synth data (ASR + MT)   |      33.2     |   26.1    | |
 | OWSM 3.1 EBF , finetuned on synth data (ASR + MT)   |      25.8     | 18.7      | |
@@ -39,6 +40,7 @@ Note that some systems use oracle transcriptions and are only listed for referen
 | _Reference transcripts + Google Translate API_         |     0.690      |       | |
 | _Reference transcripts + DeepL_                        |     0.678      |       | |
 | Whisper-medium-et-orthographic + Google Translate API  |     0.628      |  0.617     |      |
+| SeamlessM4T v2 (large), finetuned on extra web data    |     0.468      |   0.603    | |
 | SeamlessM4T v2 (large), finetuned on synth data (ASR + MT) |  0.618       |   0.603    | |
 | Whisper-large-v3, finetuned on synth data (ASR + MT)   |   0.611        |      | |
 | OWSM 3.1 EBF , finetuned on synth data (ASR + MT)   |     0.541      |       | |
