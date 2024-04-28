@@ -40,6 +40,7 @@ Note that some systems use oracle transcriptions and are only listed for referen
 | _Reference transcripts + Google Translate API_         |     0.690      |       | |
 | _Reference transcripts + DeepL_                        |     0.678      |       | |
 | Whisper-medium-et-orthographic + Google Translate API  |     0.628      |  0.617     |      |
+| SeamlessM4T v2 (large)                                 |     0.348      |   0.426    | |
 | SeamlessM4T v2 (large), finetuned on extra web data    |     0.468      |   0.488    | |
 | SeamlessM4T v2 (large), finetuned on synth data (ASR + MT) |  0.618       |   0.603    | |
 | Whisper-large-v3, finetuned on synth data (ASR + MT)   |   0.611        |      | |
