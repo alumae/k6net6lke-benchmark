@@ -25,10 +25,10 @@ Note that some systems use oracle transcriptions and are only listed for referen
 | Whisper-medium-et-orthographic + Google Translate API  |     34.7      |   23.4    |      |
 | OWSM 3.0, finetuned on extra web data                  |      8.7      |    5.4    |      |
 | SeamlessM4T v2 (large), finetuned on extra web data    |      19.3     |   14.4        |      |  4.3
-| SeamlessM4T v2 (large), finetuned on synth data (ASR + MT) |     35.4      |   26.8    | 18.0 | 16.4 |
+| SeamlessM4T v2 (large), finetuned on synth data (ASR + MT) |     35.4      |   26.8    || 16.4 |
 | SeamlessM4T v2 (large), finetuned on extra web data + synth data (ASR + MT) |     34.7      |    25.9  |    | 12.9 |
 | Whisper-large-v3, finetuned on extra web data   |  17.9         |   11.7    | | 14.3
-| Whisper-large-v3, finetuned on synth data (ASR + MT)   |      33.2     |   26.1    | 13.8 | 4.4
+| Whisper-large-v3, finetuned on synth data (ASR + MT)   |      33.2     |   26.1    | | 4.4
 | Whisper-large-v3, finetuned on extra web data +  synth data (ASR + MT)   |      33.0     |   25.5    | | 16.8 |
 | OWSM 3.1 EBF , finetuned on synth data (ASR + MT)   |      25.8     | 18.7      | | 8.5
 
@@ -45,10 +45,10 @@ Note that some systems use oracle transcriptions and are only listed for referen
 | Whisper-medium-et-orthographic + Google Translate API  |     0.628      |  0.617     |      |  
 | SeamlessM4T v2 (large)                                 |     0.348      |   0.426    | |   0.448 |
 | SeamlessM4T v2 (large), finetuned on extra web data    |     0.468      |   0.488    | |   0.261
-| SeamlessM4T v2 (large), finetuned on synth data (ASR + MT) |  0.618       |   0.603    |   0.4628 | 0.494 |
+| SeamlessM4T v2 (large), finetuned on synth data (ASR + MT) |  0.618       |   0.603    |    | 0.494 |
 | SeamlessM4T v2 (large), finetuned on extra web data + synth data (ASR + MT) |     0.617      |   0.605   | | 0.426 |
 | Whisper-large-v3, finetuned on extra web data   |  0.496         |  0.413     | | 0.523
-| Whisper-large-v3, finetuned on synth data (ASR + MT)   |   0.611        |  0.605    |0.3568 | 0.269 |
+| Whisper-large-v3, finetuned on synth data (ASR + MT)   |   0.611        |  0.605    | | 0.269 |
 | Whisper-large-v3, finetuned on extra web data +  synth data (ASR + MT)   |  0.614 | 0.603 ||  0.522
 | OWSM 3.1 EBF , finetuned on synth data (ASR + MT)   |     0.541      |       | | 0.360
 
