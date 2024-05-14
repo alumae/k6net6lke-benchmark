@@ -2,9 +2,9 @@
 
 # Begin configuration section.
 
-refdir=data/et
-source=et
-target=en
+refdir=data/ru
+source=ru
+target=et
 
 . ./utils/parse_options.sh
 
