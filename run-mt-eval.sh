@@ -6,7 +6,8 @@ refdir=data/et
 source=et
 target=en
 
-. ./utils/parse_options.sh
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. ${__dir}/utils/parse_options.sh
 
 if [ $# -ne 1 ]; then
   echo "Usage: $0 --refdir <dir-with-reference-OSt-files> --source <source_lang> --target <target_lang> <dir-with-output-files from-machine-translation>"
@@ -18,8 +19,21 @@ mtdir=$1
 
 set -e # exit on error
 
-mt_files=${mtdir}/*.${source}.${target}.mt
 ref_files=${refdir}/*.${target}.OSt
+
+basenames=()
+for file in $ref_files; do
+    basenames+=($(basename "$file" .${target}.OSt ))
+done
+
+
+mt_files=$(for basename in "${basenames[@]}"; do ls ${mtdir}/${basename}.${source}.${target}.mt; done)
+
+
+#mt_files=${mtdir}/*.${source}.${target}.mt
+
+#echo $mt_files
+#echo $ref_files
 
 
 # Convert strings to arrays
@@ -53,4 +67,11 @@ done
 # Convert interleaved array to string
 interleaved_string="${interleaved[@]}"
 
-MTeval -i $interleaved_string -f mt ref --simple | tee /dev/stderr | grep mwerSegmenter | awk '{sum+=$4} END {print("\n\nAverage BLEU: ", sum/NR)}'
+SCRATCH=$(mktemp -t tmp.XXXXXXXXXX)
+MTeval -i $interleaved_string -f mt ref --simple > $SCRATCH
+
+cat $SCRATCH > /dev/stderr
+cat $SCRATCH > ${mtdir}/${source}.${target}.results.txt
+
+cat $SCRATCH | grep sacreBLEU | awk '{sum+=$4} END {print("\n\nAverage BLEU: ", sum/NR)}' | tee /dev/stderr >> ${mtdir}/${source}.${target}.results.txt
+cat $SCRATCH | grep BLEURT | awk '{sum+=$4} END {print("\n\nAverage BLEURT: ", sum/NR)}' | tee /dev/stderr >> ${mtdir}/${source}.${target}.results.txt

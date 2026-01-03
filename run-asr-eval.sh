@@ -5,10 +5,13 @@
 refdir=data/et
 source=et
 
-. ./utils/parse_options.sh
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. ${__dir}/utils/parse_options.sh
+
+#. ./utils/parse_options.sh
 
 if [ $# -ne 1 ]; then
-  echo "Usage: $0 --refdir <dir-with-reference-OSt-files> --source <source_lang> --target <target_lang> <dir-with-output-files-from-asr>"
+  echo "Usage: $0 --refdir <dir-with-reference-OSt-files> --source <source_lang> <dir-with-output-files-from-asr>"
   echo "E.g.: $0 outputs/et/mt/outputs/et/mt/whisper-large-v2"
   exit 1;
 fi
