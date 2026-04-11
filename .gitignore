@@ -1,2 +1,17 @@
 *.flac
+*.opus
+*.mp3
+*.wav
 
+# Large per-file audio — the user downloads these out-of-band; see README.md
+data/**/*.opus
+data/**/*.mp3
+data/**/*.wav
+data/**/*.flac
+
+# Generated artefacts from run-asr-eval.sh / run-mt-eval.sh
+outputs/**/*.results.txt
+
+# Python bytecode
+__pycache__/
+*.pyc
