@@ -390,6 +390,29 @@ in Python so that the legacy reproduction is actually reproducible.
    cite). It also reports corpus chrF, which is more robust to tokenisation
    choices than BLEU and is increasingly the default secondary metric in
    recent MT evaluations.
+3. Optional: when run with `--bleurt true`, the same normalized file pairs
+   are also passed through `utils/aggregate_bleurt.py`, which loads the
+   full `lucadiliello/BLEURT-20` (~576M params, RemBERT-based, multilingual
+   over 100+ languages) from a dedicated Python venv at `~/.venvs/bleurt`.
+   Each ref/hyp file pair is line-aligned — or, if the line counts differ,
+   re-aligned via `mwerSegmenter` (the same aligner SLTev uses for
+   sacreBLEU) so that BLEURT gets true sentence-parallel pairs. Per-pair
+   scores are averaged into a corpus BLEURT. BLEURT catches fluency /
+   adequacy issues that BLEU misses (paraphrases, word-order variants,
+   synonym substitutions), and is the de facto secondary learned metric
+   alongside sacreBLEU/chrF on modern MT leaderboards.
+
+The `--bleurt` path requires an extra one-time setup:
+
+    python3 -m venv --system-site-packages ~/.venvs/bleurt
+    ~/.venvs/bleurt/bin/pip install 'transformers>=4.40,<5' bleurt-pytorch
+
+`bleurt-pytorch` is not compatible with `transformers` 5.x, so the
+isolated venv is necessary — but since it uses `--system-site-packages`
+it inherits torch/CUDA from the base install and only adds ~200 MB.
+
+The BLEURT-20 model (~2.3 GB) is downloaded to `~/.cache/huggingface/hub/`
+on first use.
 
 Everything the normalizer does on the ASR side applies here, with the one
 per-language choice that English goes through Whisper's

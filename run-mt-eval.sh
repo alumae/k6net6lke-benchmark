@@ -6,6 +6,8 @@ refdir=data/et
 source=et
 target=en
 normalize=true   # apply fair normalization (see BENCHMARK_ISSUES.md)
+bleurt=false     # additionally score with BLEURT-20 (requires BLEURT_PYTHON)
+bleurt_python="${BLEURT_PYTHON:-$HOME/.venvs/bleurt/bin/python3}"
 
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . ${__dir}/utils/parse_options.sh
@@ -22,6 +24,10 @@ if [ $# -ne 1 ]; then
   echo "  --normalize false reproduces the original MTeval --simple pipeline"
   echo "                    with macro-averaged per-file sacreBLEU. Use for"
   echo "                    backwards-compatible comparisons with old results."
+  echo "  --bleurt true     additionally score with BLEURT-20 via"
+  echo "                    utils/aggregate_bleurt.py using the python at"
+  echo "                    BLEURT_PYTHON (default: ~/.venvs/bleurt/bin/python3)."
+  echo "                    See README.md for how to create that venv."
   exit 1;
 fi
 
@@ -133,3 +139,17 @@ done
 
 python3 "$aggregator" "${ref_norm_args[@]}" "${hyp_norm_args[@]}" \
   | tee ${mtdir}/${source}.${target}.results.txt
+
+if [ "$bleurt" = "true" ]; then
+    bleurt_aggregator="${__dir}/utils/aggregate_bleurt.py"
+    if [ ! -x "$bleurt_python" ] && [ ! -f "$bleurt_python" ]; then
+        echo "BLEURT_PYTHON not found: $bleurt_python" >&2
+        echo "See README.md for how to create ~/.venvs/bleurt." >&2
+        exit 3
+    fi
+    echo
+    echo "=== BLEURT-20 ==="
+    "$bleurt_python" "$bleurt_aggregator" \
+      "${ref_norm_args[@]}" "${hyp_norm_args[@]}" \
+      | tee -a ${mtdir}/${source}.${target}.results.txt
+fi

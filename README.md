@@ -63,9 +63,29 @@ lipuga:
 
 Uued sõltuvused (lisaks `SLTev`-le):
 
-    pip3 install jiwer estnltk num2words
+    pip3 install jiwer estnltk num2words sacrebleu
     # valikuliselt, parema inglise normaliseerimise jaoks:
     pip3 install -U openai-whisper
+
+### BLEURT (valikuline)
+
+`run-mt-eval.sh` oskab lisaks sacreBLEU-le arvutada ka BLEURT-20 skoore:
+
+    ./run-mt-eval.sh --bleurt true --target en outputs/et/mt/whisper-large-v2
+
+Kuna `bleurt-pytorch` ei ole ühilduv uuema `transformers` 5.x-iga, tuleb
+BLEURT paigaldada eraldi virtuaalkeskkonda. Ühekordne seadistus:
+
+    python3 -m venv --system-site-packages ~/.venvs/bleurt
+    ~/.venvs/bleurt/bin/pip install 'transformers>=4.40,<5' bleurt-pytorch
+
+Esimesel käivitusel laadib skript alla `lucadiliello/BLEURT-20` mudeli
+(~2.3 GB) kataloogi `~/.cache/huggingface/hub/`. Skoorimine toimub GPU-l,
+kui see on olemas (mudel on 576M parameetriga), vastasel juhul CPU-l.
+
+Kui BLEURT python on mõnes muus kohas, seadista `BLEURT_PYTHON` muutuja:
+
+    BLEURT_PYTHON=/path/to/python3 ./run-mt-eval.sh --bleurt true outputs/et/mt/mingi-süsteem
 
 
 Selleks, et hinnata tõlkesüsteemi hüpoteeside BLEU skoori, käivita:
