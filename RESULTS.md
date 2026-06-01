@@ -180,6 +180,7 @@ above.)*
 |----------------------------------|:------------:|:-----------------:|:-----------------:|
 | Whisper-medium-et-orthographic   |     10.5     |        8.4        |        8.8        |
 | Whisper-large-v3-et-orthographic |      9.7     |        7.4        |        7.6        |
+| Gemini 3 Flash Preview via OpenRouter |      —       |       10.8        |       11.1        |
 
 All results are calculated on dev data.
 
@@ -198,3 +199,6 @@ industry-standard convention used by Whisper, Kaldi, and ESPnet.
 
 See [BENCHMARK_ISSUES.md](BENCHMARK_ISSUES.md) for the detailed rationale.
 
+See [GEMINI3_FLASH_ET_ASR.md](GEMINI3_FLASH_ET_ASR.md) for the Gemini 3 Flash
+Preview ASR run, comparison with the Estonian Whisper baselines, and error
+profile.

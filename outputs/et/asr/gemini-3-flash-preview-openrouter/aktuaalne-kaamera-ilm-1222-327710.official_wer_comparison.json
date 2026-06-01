@@ -1,0 +1,53 @@
+{
+  "evaluated_at": "2026-05-31",
+  "benchmark_checkout": "/home/aivo/dev2/k6net6lke-benchmark",
+  "audio": {
+    "path": "data/et/aktuaalne-kaamera-ilm-1222-327710.et.OS.flac",
+    "duration_seconds": 1184.155313,
+    "sha256": "9461ba26f93928b75fb15bc127bacfcdfa2daf9a6f89afa55ea3e553e1219580",
+    "whole_audio_input": true
+  },
+  "reference": {
+    "path": "data/et/aktuaalne-kaamera-ilm-1222-327710.et.OSt",
+    "sha256": "f4e4421903b29431ce8bebe196f0f28a64281a14c44f87a3d765b44dd9af3200"
+  },
+  "normalization": {
+    "script": "run-asr-eval.sh",
+    "normalize": true,
+    "metric": "micro WER",
+    "normalized_reference_words": 2356
+  },
+  "results": [
+    {
+      "system": "gemini-3-flash-preview-openrouter",
+      "model": "google/gemini-3-flash-preview",
+      "output_path": "outputs/et/asr/gemini-3-flash-preview-openrouter/aktuaalne-kaamera-ilm-1222-327710.et.asr",
+      "substitutions": 114,
+      "deletions": 50,
+      "insertions": 17,
+      "edits": 181,
+      "wer": 0.0768,
+      "wer_percent": 7.68
+    },
+    {
+      "system": "whisper-medium-et-orthographic",
+      "output_path": "outputs/et/asr/whisper-medium-et-orthographic/aktuaalne-kaamera-ilm-1222-327710.et.asr",
+      "substitutions": 80,
+      "deletions": 15,
+      "insertions": 28,
+      "edits": 123,
+      "wer": 0.0522,
+      "wer_percent": 5.22
+    },
+    {
+      "system": "whisper-large-v3-et-orthographic",
+      "output_path": "outputs/et/asr/whisper-large-v3-et-orthographic/aktuaalne-kaamera-ilm-1222-327710.et.asr",
+      "substitutions": 76,
+      "deletions": 21,
+      "insertions": 24,
+      "edits": 121,
+      "wer": 0.0514,
+      "wer_percent": 5.14
+    }
+  ]
+}

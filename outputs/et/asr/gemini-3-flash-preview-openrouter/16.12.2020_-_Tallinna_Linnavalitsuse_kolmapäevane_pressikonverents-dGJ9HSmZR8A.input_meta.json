@@ -1,0 +1,38 @@
+{
+  "model": "google/gemini-3-flash-preview",
+  "input_strategy": "whole_audio_transcoded_mp3_after_flac_openrouter_failures",
+  "source_flac": "data/et/16.12.2020_-_Tallinna_Linnavalitsuse_kolmapäevane_pressikonverents-dGJ9HSmZR8A.et.OS.flac",
+  "source_duration_seconds": 1754.563625,
+  "request_audio_format": "mp3",
+  "request_audio_transcode": {
+    "sample_rate_hz": 16000,
+    "channels": 1,
+    "bitrate": "64k"
+  },
+  "provider_route": "vertex-global",
+  "provider_seen": "Google",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 43924,
+    "completion_tokens": 5767,
+    "total_tokens": 49691,
+    "cost": 0.0611955,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 43865,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.0611955,
+      "upstream_inference_prompt_cost": 0.0438945,
+      "upstream_inference_completions_cost": 0.017301
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}
