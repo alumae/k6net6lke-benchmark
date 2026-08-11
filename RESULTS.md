@@ -176,11 +176,11 @@ above.)*
 
 ## Estonian
 
-| Model                            | WER (legacy) | WER (fair, macro) | WER (fair, micro) |
-|----------------------------------|:------------:|:-----------------:|:-----------------:|
-| Whisper-medium-et-orthographic   |     10.5     |        8.4        |        8.8        |
-| Whisper-large-v3-et-orthographic |      9.7     |        7.4        |        7.6        |
-| Gemini 3 Flash Preview via OpenRouter |      —       |       10.8        |       11.1        |
+| Model                            | WER (legacy) | WER (fair) |
+|----------------------------------|:------------:|:----------:|
+| Whisper-medium-et-orthographic   |     10.5     |    8.8     |
+| Whisper-large-v3-et-orthographic |      9.7     |    7.6     |
+| Gemini 3 Flash Preview via OpenRouter |      —       |    11.1    |
 
 All results are calculated on dev data.
 
@@ -193,9 +193,9 @@ merging bug) + macro-averaged per-file LPW. It corresponds to
 (rather than deletes) punctuation with a space, strips Unicode editorial
 punctuation, and uses NFC normalization. Both reference and hypothesis go
 through exactly the same pipeline before scoring. It corresponds to
-`./run-asr-eval.sh` (the new default). Report the micro-averaged number
-(sum of all edits / sum of all reference words) — that is the
-industry-standard convention used by Whisper, Kaldi, and ESPnet.
+`./run-asr-eval.sh` (the new default). It reports a single micro-averaged
+number (sum of all edits / sum of all reference words) — the industry-standard
+convention used by Whisper, Kaldi, and ESPnet.
 
 See [BENCHMARK_ISSUES.md](BENCHMARK_ISSUES.md) for the detailed rationale.
 

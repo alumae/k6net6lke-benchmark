@@ -12,8 +12,8 @@ existing Estonian Whisper ASR baselines.
 * Evaluation command:
   `./run-asr-eval.sh --refdir data/et --source et outputs/et/asr/<system>`
 * Metric: normalized benchmark WER. The benchmark normalizer lowercases text,
-  expands numbers and units, converts punctuation to spaces, and computes both
-  macro and micro WER. Use micro WER as the primary score.
+  expands numbers and units, converts punctuation to spaces, and reports a
+  single micro-averaged WER (sum of edits / sum of reference words).
 
 All requests used the whole audio file as a single OpenRouter `input_audio`
 message. Five files were sent as the source FLAC. Two files repeatedly failed
@@ -27,14 +27,14 @@ Those two inputs were still single-request, whole-audio inputs, not chunks.
 
 ## WER summary
 
-| System | Macro WER | Micro WER | S | D | I | Ref words |
-|---|---:|---:|---:|---:|---:|---:|
-| Gemini 3 Flash Preview via OpenRouter | 10.78 | 11.08 | 1689 | 898 | 520 | 28044 |
-| Whisper-medium-et-orthographic | 8.43 | 8.80 | 1320 | 592 | 557 | 28044 |
-| Whisper-large-v3-et-orthographic | 7.40 | 7.62 | 1236 | 399 | 501 | 28044 |
+| System | WER | S | D | I | Ref words |
+|---|---:|---:|---:|---:|---:|
+| Gemini 3 Flash Preview via OpenRouter | 11.08 | 1689 | 898 | 520 | 28044 |
+| Whisper-medium-et-orthographic | 8.80 | 1320 | 592 | 557 | 28044 |
+| Whisper-large-v3-et-orthographic | 7.62 | 1236 | 399 | 501 | 28044 |
 
 Gemini is 2.28 absolute WER points behind Whisper medium and 3.46 points behind
-Whisper large-v3 on normalized micro WER.
+Whisper large-v3 on normalized WER.
 
 ## Per-file WER
 

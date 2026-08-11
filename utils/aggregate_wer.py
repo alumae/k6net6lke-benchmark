@@ -2,10 +2,20 @@
 Micro-averaged WER aggregator for the k6net6lke ASR benchmark.
 
 Reads pairs of (reference, hypothesis) text files — already normalized by
-``normalize_asr_text.py`` — and reports per-file WER plus the corpus-level
-macro- and micro-averages. The micro-average is what Whisper, Kaldi, and
-ESPnet leaderboards use by default and is the number you should cite when
-comparing systems.
+``normalize_asr_text.py`` — and reports per-file WER plus a single
+corpus-level WER, micro-averaged:
+
+    WER = sum(S + D + I) / sum(N_ref_words)
+
+This is the convention used by sclite, Kaldi ``compute-wer``, ESPnet, and
+Whisper-style leaderboards, so it is directly comparable to published
+numbers. See BENCHMARK_ISSUES.md Issue 4 for the rationale.
+
+Only this one corpus-level figure is reported. An earlier version also
+printed an unweighted macro-average over files; having two headline numbers
+side by side invited mix-ups in downstream write-ups, and the macro-average
+was never the number to cite here. Per-file WER and the S/D/I totals are
+still shown as diagnostics.
 
 Inputs are whitespace-joined line-by-line (no segment alignment via
 mwerSegmenter), then passed to ``jiwer.process_words`` which computes a
@@ -76,7 +86,6 @@ def main(argv: list[str]) -> int:
     total_sub = 0
     total_del = 0
     total_ins = 0
-    per_file_wers: list[float] = []
 
     print("file\tref_words\tS\tD\tI\tWER")
     for ref_s, hyp_s in zip(args.ref, args.hyp):
@@ -85,7 +94,6 @@ def main(argv: list[str]) -> int:
         ref_words, s, d, i, h = _score_pair(ref_p, hyp_p)
         edits = s + d + i
         wer = edits / ref_words if ref_words else float("inf")
-        per_file_wers.append(wer)
         total_ref += ref_words
         total_sub += s
         total_del += d
@@ -94,15 +102,13 @@ def main(argv: list[str]) -> int:
 
     total_edits = total_sub + total_del + total_ins
     micro = total_edits / total_ref if total_ref else float("inf")
-    macro = sum(per_file_wers) / len(per_file_wers) if per_file_wers else float("inf")
 
     print()
     print(f"files          : {len(args.ref)}")
     print(f"total ref words: {total_ref}")
     print(f"total S/D/I    : {total_sub}/{total_del}/{total_ins}  "
           f"(edits={total_edits})")
-    print(f"macro WER      : {macro * 100:.2f}   (unweighted mean of per-file WER)")
-    print(f"micro WER      : {micro * 100:.2f}   (sum edits / sum ref words)")
+    print(f"WER            : {micro * 100:.2f}   (sum edits / sum ref words)")
     return 0
 
 
