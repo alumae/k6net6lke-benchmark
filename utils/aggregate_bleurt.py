@@ -28,12 +28,12 @@ Usage (called from run-mt-eval.sh):
 from __future__ import annotations
 
 import argparse
-import os
-import shutil
-import subprocess
 import sys
-import tempfile
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from mwer_align import align_with_mwersegmenter, load_lines  # noqa: E402
+
 
 # -------- BLEURT imports (lazy-loaded so --help doesn't pay the cost) -------
 
@@ -48,75 +48,6 @@ def _load_bleurt(model_name: str = "lucadiliello/BLEURT-20"):
     if torch.cuda.is_available():
         model = model.cuda()
     return model, tok, torch
-
-
-# ---------------------------- mwerSegmenter glue ----------------------------
-
-
-def _find_mwersegmenter() -> str:
-    # Prefer the binary shipped with SLTev — it's where everything else here
-    # gets it from, and avoids a second install step.
-    try:
-        import SLTev  # type: ignore
-        candidate = Path(SLTev.__file__).parent / "mwerSegmenter"
-        if candidate.exists():
-            return str(candidate)
-    except ImportError:
-        pass
-    for p in os.environ.get("PATH", "").split(os.pathsep):
-        candidate = Path(p) / "mwerSegmenter"
-        if candidate.exists():
-            return str(candidate)
-    raise RuntimeError(
-        "mwerSegmenter binary not found. Install SLTev (`pip install SLTev`) "
-        "so the bundled binary is available, or place it on PATH."
-    )
-
-
-def _align_with_mwersegmenter(ref_lines: list[str], hyp_lines: list[str]) -> list[str]:
-    """Return a list of `len(ref_lines)` hypothesis strings, each aligned
-    to the corresponding reference sentence. Uses mwerSegmenter under the
-    hood, matching what SLTev does for sacreBLEU scoring.
-    """
-    if not ref_lines:
-        return []
-    # If both sides already have the same line count, skip the binary and
-    # just trust the line-parallel structure. This is the common case for
-    # systems (like NLLB) that respect reference segmentation.
-    if len(ref_lines) == len(hyp_lines):
-        return hyp_lines
-
-    mwer = _find_mwersegmenter()
-    with tempfile.TemporaryDirectory() as td:
-        tdp = Path(td)
-        ref_path = tdp / "temp_ref"
-        hyp_path = tdp / "temp_translate"
-        ref_path.write_text("\n".join(ref_lines) + "\n", encoding="utf-8")
-        hyp_path.write_text("\n".join(hyp_lines) + "\n", encoding="utf-8")
-        # mwerSegmenter writes __segments to the CURRENT directory.
-        subprocess.run(
-            [mwer, "-mref", "temp_ref", "-hypfile", "temp_translate"],
-            cwd=str(tdp),
-            check=True,
-            capture_output=True,
-        )
-        segments = (tdp / "__segments").read_text(encoding="utf-8").splitlines()
-    # Pad / truncate defensively so count matches ref.
-    if len(segments) < len(ref_lines):
-        segments = segments + [""] * (len(ref_lines) - len(segments))
-    return segments[: len(ref_lines)]
-
-
-# ----------------------------- file loading --------------------------------
-
-
-def _load_lines(path: Path) -> list[str]:
-    lines = []
-    for raw in path.read_text(encoding="utf-8").splitlines():
-        s = raw.strip()
-        if s:
-            lines.append(s)
-    return lines
 
 
 # --------------------------- BLEURT scoring core ---------------------------
@@ -194,10 +125,10 @@ def main(argv: list[str]) -> int:
     for ref_s, hyp_s in zip(args.ref, args.hyp):
         ref_path = Path(ref_s)
         hyp_path = Path(hyp_s)
-        ref_lines = _load_lines(ref_path)
-        hyp_lines = _load_lines(hyp_path)
+        ref_lines = load_lines(ref_path)
+        hyp_lines = load_lines(hyp_path)
         # Align hypothesis to reference sentence boundaries.
-        aligned_hyp = _align_with_mwersegmenter(ref_lines, hyp_lines)
+        aligned_hyp = align_with_mwersegmenter(ref_lines, hyp_lines)
         # Drop pairs where either side is empty post-alignment.
         pairs = [
             (r, h) for r, h in zip(ref_lines, aligned_hyp) if r.strip() and h.strip()
