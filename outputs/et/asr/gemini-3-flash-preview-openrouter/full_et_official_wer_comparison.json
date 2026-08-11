@@ -1,0 +1,129 @@
+{
+  "evaluated_at": "2026-06-01",
+  "benchmark_checkout": "/home/aivo/dev2/k6net6lke-benchmark",
+  "model": "google/gemini-3-flash-preview",
+  "whole_audio_input": true,
+  "normalization": {
+    "script": "run-asr-eval.sh",
+    "normalize": true,
+    "primary_metric": "micro WER",
+    "note": "The benchmark script also reports macro WER as the unweighted mean of per-file WER."
+  },
+  "gemini_input_notes": [
+    {
+      "files": [
+        "aktuaalne-kaamera-ilm-1001-317793",
+        "aktuaalne-kaamera-ilm-1222-327710",
+        "aktuaalne-kaamera-ilm-nadal-322248",
+        "ringvaade-2033-320571",
+        "ringvaade-2071-326938"
+      ],
+      "request_audio_format": "flac",
+      "input_strategy": "whole source FLAC in one OpenRouter request"
+    },
+    {
+      "files": [
+        "16.12.2020_-_Tallinna_Linnavalitsuse_kolmapäevane_pressikonverents-dGJ9HSmZR8A",
+        "Valitsuse_pressikonverents__15._oktoober_2020-dJypQ9rLypU"
+      ],
+      "request_audio_format": "mp3",
+      "input_strategy": "whole audio transcoded to mono 16 kHz 64 kbps MP3 after repeated whole-FLAC OpenRouter upstream 502/504 failures"
+    }
+  ],
+  "systems": [
+    {
+      "system": "gemini-3-flash-preview-openrouter",
+      "output_dir": "outputs/et/asr/gemini-3-flash-preview-openrouter",
+      "files": 7,
+      "total_reference_words": 28044,
+      "substitutions": 1689,
+      "deletions": 898,
+      "insertions": 520,
+      "edits": 3107,
+      "macro_wer_percent": 10.78,
+      "micro_wer_percent": 11.08,
+      "per_file": [
+        {
+          "file": "16.12.2020_-_Tallinna_Linnavalitsuse_kolmapäevane_pressikonverents-dGJ9HSmZR8A",
+          "reference_words": 2635,
+          "substitutions": 107,
+          "deletions": 70,
+          "insertions": 24,
+          "wer_percent": 7.63
+        },
+        {
+          "file": "Valitsuse_pressikonverents__15._oktoober_2020-dJypQ9rLypU",
+          "reference_words": 6609,
+          "substitutions": 321,
+          "deletions": 255,
+          "insertions": 128,
+          "wer_percent": 10.65
+        },
+        {
+          "file": "aktuaalne-kaamera-ilm-1001-317793",
+          "reference_words": 4089,
+          "substitutions": 208,
+          "deletions": 77,
+          "insertions": 29,
+          "wer_percent": 7.68
+        },
+        {
+          "file": "aktuaalne-kaamera-ilm-1222-327710",
+          "reference_words": 2356,
+          "substitutions": 114,
+          "deletions": 50,
+          "insertions": 17,
+          "wer_percent": 7.68
+        },
+        {
+          "file": "aktuaalne-kaamera-ilm-nadal-322248",
+          "reference_words": 4254,
+          "substitutions": 176,
+          "deletions": 82,
+          "insertions": 53,
+          "wer_percent": 7.31
+        },
+        {
+          "file": "ringvaade-2033-320571",
+          "reference_words": 3732,
+          "substitutions": 368,
+          "deletions": 159,
+          "insertions": 133,
+          "wer_percent": 17.68
+        },
+        {
+          "file": "ringvaade-2071-326938",
+          "reference_words": 4369,
+          "substitutions": 395,
+          "deletions": 205,
+          "insertions": 136,
+          "wer_percent": 16.85
+        }
+      ]
+    },
+    {
+      "system": "whisper-medium-et-orthographic",
+      "output_dir": "outputs/et/asr/whisper-medium-et-orthographic",
+      "files": 7,
+      "total_reference_words": 28044,
+      "substitutions": 1320,
+      "deletions": 592,
+      "insertions": 557,
+      "edits": 2469,
+      "macro_wer_percent": 8.43,
+      "micro_wer_percent": 8.80
+    },
+    {
+      "system": "whisper-large-v3-et-orthographic",
+      "output_dir": "outputs/et/asr/whisper-large-v3-et-orthographic",
+      "files": 7,
+      "total_reference_words": 28044,
+      "substitutions": 1236,
+      "deletions": 399,
+      "insertions": 501,
+      "edits": 2136,
+      "macro_wer_percent": 7.40,
+      "micro_wer_percent": 7.62
+    }
+  ]
+}

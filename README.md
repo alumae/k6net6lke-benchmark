@@ -19,15 +19,105 @@ Need tuleks (kui vaja) alla laadida ja lahti pakkida, selleks, siinsamas kataloo
 Mingi süsteemi rakendamisena saadud tõlgitud andmed on üldjuhul mingis muus kataloogis (vaata näiteks 
 `outputs/et/mt/whisper-large-v2/`. Siin on failinimede kontseptsioon: `<failinimi>.<sisendkeel>.<sihtkeel>.mt`
 
+## ASR hindamine (`run-asr-eval.sh`)
+
+ASR väljundite hindamiseks käivita:
+
+    ./run-asr-eval.sh --refdir <dir-with-reference-OSt-files> --source <source_lang> <dir-with-asr-output-files>
+
+Näiteks:
+
+    ./run-asr-eval.sh outputs/et/asr/whisper-large-v3-et-orthographic
+
+Vaikimisi rakendab skript **õiglast normaliseerimispipeliini**, mis hoiab
+ära selle, et `Covid-19` vs `Covid üheksateist`, suitsujutumärgid,
+Unicode-mõttekriipsud, suuruskestel eraldatud sidekriipsud jms muutuksid
+tehislikeks WER-vigadeks. Pipeline rakendatakse nii referentsile kui
+ka hüpoteesile enne skoorimist:
+
+1. Unicode NFC.
+2. `estnltk` compound-token tagger leiab kuupäevad, kellaajad, numbrid,
+   sidekriipsuga ühendid, emaili/URL-i tokenid jne; iga tüüp saab oma
+   ümberkirjutuse (numbrid sõnadeks läbi sisseehitatud eesti arvude
+   kirjutaja, emailid/URL-id kustutatakse).
+3. Ühikute/sümbolite tabel (`%` → `protsenti`, `°C` → `kraadi`, ...).
+4. Kõik ülejäänud arvud sõnadeks.
+5. Kirjavahemärgid (nii ASCII kui ka Unicode `P*` kategooria) → tühik,
+   **mitte kustutus** — see on otse parandus `SLTev/ASRev.py`-s olevale
+   veale, kus `Covid-19` muudeti tokeniks `covid19`.
+6. Lowercase.
+7. Tühikud kokku.
+
+WER-skoor esitatakse nii makro- (failide keskmine) kui ka mikro- (kogu
+editide summa / referentsi sõnade koguarv) keskmisena. **Vaatle eelkõige
+mikro-WER-i** — see on tööstuse standard ja raporteeritud
+number publikatsioonides.
+
+Vaata `BENCHMARK_ISSUES.md` üksikasjalikku selgitust miks eelmine
+`ASReval --simple` pipeline ei olnud õiglane.
+
+Vanu `RESULTS.md` numbreid saab reprodutseerida `--normalize false`
+lipuga:
+
+    ./run-asr-eval.sh --normalize false outputs/et/asr/whisper-large-v3-et-orthographic
+
+Uued sõltuvused (lisaks `SLTev`-le):
+
+    pip3 install jiwer estnltk num2words sacrebleu
+    # valikuliselt, parema inglise normaliseerimise jaoks:
+    pip3 install -U openai-whisper
+
+### BLEURT (valikuline)
+
+`run-mt-eval.sh` oskab lisaks sacreBLEU-le arvutada ka BLEURT-20 skoore:
+
+    ./run-mt-eval.sh --bleurt true --target en outputs/et/mt/whisper-large-v2
+
+Kuna `bleurt-pytorch` ei ole ühilduv uuema `transformers` 5.x-iga, tuleb
+BLEURT paigaldada eraldi virtuaalkeskkonda. Ühekordne seadistus:
+
+    python3 -m venv --system-site-packages ~/.venvs/bleurt
+    ~/.venvs/bleurt/bin/pip install 'transformers>=4.40,<5' bleurt-pytorch
+
+Esimesel käivitusel laadib skript alla `lucadiliello/BLEURT-20` mudeli
+(~2.3 GB) kataloogi `~/.cache/huggingface/hub/`. Skoorimine toimub GPU-l,
+kui see on olemas (mudel on 576M parameetriga), vastasel juhul CPU-l.
+
+Kui BLEURT python on mõnes muus kohas, seadista `BLEURT_PYTHON` muutuja:
+
+    BLEURT_PYTHON=/path/to/python3 ./run-mt-eval.sh --bleurt true outputs/et/mt/mingi-süsteem
+
+
 Selleks, et hinnata tõlkesüsteemi hüpoteeside BLEU skoori, käivita:
 
-    ./run-mt-eval.sh --refdir <dir-with-reference-OSt-files> `
-      --source <source_lang> --target <target_lang> <dir-with-output-files from-machine-translation>
+    ./run-mt-eval.sh --refdir <dir-with-reference-OSt-files> \
+      --source <source_lang> --target <target_lang> <dir-with-output-files-from-machine-translation>
 
-NB! Enne peab olema installitud `SLTev` pythoni pakett (`pip3 install SLTev`).  
-  
+NB! Enne peab olema installitud `SLTev` pythoni pakett (`pip3 install SLTev`) —
+vajalik ainult siis, kui soovid käivitada vana (backwards-compat) pipeline'i
+`--normalize false` lipuga. Uue (õiglase) pipeline'i jaoks vaja `jiwer`,
+`sacrebleu`, `estnltk` ja `num2words` (vt allpool).
+
 Tõlgitud andmed ei pea kasutama sama segmentatsiooni, mis referents-tõlked! Põhimõtteliselt võib 
 tõlgitud tekst olla ka kõik ühel real. Joondus automaatsete tõlgete ja referents-tõlgete vahel leitakse automaatselt testimise käigus.
+
+**Vaikimisi** rakendab `run-mt-eval.sh` sama õiglast normaliseerimispipeliini
+kui `run-asr-eval.sh` (vt allpool ja `BENCHMARK_ISSUES.md`): nii referents
+kui ka MT väljund läbivad keelespetsiifilise normaliseerija (eesti keel:
+sisseehitatud arvude kirjutaja; vene keel: `num2words(lang='ru')`; inglise
+keel: Whisper `EnglishTextNormalizer`), misjärel arvutatakse
+**korpustasemel sacreBLEU** (`13a` tokeniser, vastavalt sacreBLEU-st
+leitav tavaline konventsioon), mitte makro-keskmist per-file BLEU-d.
+See kõrvaldab BLEU-nihke, mis tekib siis, kui MT süsteemi väljund kirjutab
+numbreid digitaalselt (nt "55") samal ajal kui referents-tõlge on sõnades
+("viiskümmend viis" / "fifty-five" / "пятьдесят пять").
+
+Vanade `RESULTS.md` numbrite reprodutseerimiseks kasuta `--normalize false`:
+
+    ./run-mt-eval.sh --normalize false --target en outputs/et/mt/whisper-large-v2
+
+Vt `BENCHMARK_ISSUES.md` täielikku ülevaadet sellest, miks vana `ASReval`-
+ja `MTeval`-põhine pipeline ei olnud õiglane süsteemide võrdlemiseks.
   
 
   

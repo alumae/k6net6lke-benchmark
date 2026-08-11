@@ -1,0 +1,14 @@
+file	ref_words	S	D	I	WER
+16.12.2020_-_Tallinna_Linnavalitsuse_kolmapäevane_pressikonverents-dGJ9HSmZR8A.ref	2635	70	19	21	0.0417
+Valitsuse_pressikonverents__15._oktoober_2020-dJypQ9rLypU.ref	6609	276	155	119	0.0832
+aktuaalne-kaamera-ilm-1001-317793.ref	4089	164	79	54	0.0726
+aktuaalne-kaamera-ilm-1222-327710.ref	2356	80	15	28	0.0522
+aktuaalne-kaamera-ilm-nadal-322248.ref	4254	174	106	54	0.0785
+ringvaade-2033-320571.ref	3732	272	96	158	0.1409
+ringvaade-2071-326938.ref	4369	284	122	123	0.1211
+
+files          : 7
+total ref words: 28044
+total S/D/I    : 1320/592/557  (edits=2469)
+macro WER      : 8.43   (unweighted mean of per-file WER)
+micro WER      : 8.80   (sum edits / sum ref words)
